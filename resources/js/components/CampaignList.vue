@@ -1,8 +1,9 @@
 <template>
 <div class="mt-8 bg-white dark:bg-gray-800 overflow-hidden shadow sm:rounded-lg">
-  <div v-for="campaign in campaigns">
+  <div v-for="campaign in campaigns" :key="campaign">
     <div class="p-4 border-t border-grarey-200 dark:border-gray-700">
         <a :href="'campaigns/'+campaign.id+'/edit'"><i class="material-icons" >edit</i></a>
+        <i class="material-icons" @click="remove(campaign.id)">delete</i>
             <h3>{{campaign.name}}</h3>
             <h3>From    :{{campaign.from}}</h3>
             <h3>To  :{{campaign.to}}</h3>
@@ -40,8 +41,14 @@ export default {
         }
     },
     methods:{
-        edit(campaignID){
-            axios.get('api/campaigns/'+campaignID);
+        remove(campaignID){
+            axios.delete('campaigns/'+campaignID)
+            .then(res => {
+                const index = this.campaigns.findIndex(object => {
+                    return object.id === campaignID;
+                });
+                this.campaigns.splice(index, 1);
+            });
         },
         showModal(campaign){
             this.show = true;

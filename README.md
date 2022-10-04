@@ -6,6 +6,7 @@
 
 there is two ways to start the system : 
 * by Laravel Sail : 
+    *  ``` composer install ```
     * ``` ./vendor/bin/sail up -d```
         * required ports : 8080 , 3306 , 8082 
     * ``` ./vendor/bin/sail php artisan migrate ```

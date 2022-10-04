@@ -86,8 +86,11 @@ class CampaignController extends Controller
         $newImages = $request->images;
         $data = $request->toArray();
         $dates = explode(',',$data['date']);
-        $data['from'] = $dates[0];
-        $data['to'] = $dates[1];
+        if(count($dates) > 1)
+        {
+            $data['from'] = $dates[0];
+            $data['to'] = $dates[1];
+        }
         $campaign->update($data);
         $newImages = $this->filterNewImages($newImages, $oldImages);
         $this->storeImages($newImages, $campaign->id);
@@ -101,9 +104,11 @@ class CampaignController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Campaign $campaign)
     {
-        //
+        $campaign->delete();
+        $campaign->images()->delete();
+        return response(['message' => 'Campaign is deleted'], 201);
     }
 
     public function storeImages($images, $campaign_id)
